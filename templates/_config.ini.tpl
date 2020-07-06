@@ -66,7 +66,7 @@ keys = console
 keys = generic
 
 [logger_root]
-level = WARN
+level = {{ .Values.logLevel }}
 handlers = console
 
 [handler_console]

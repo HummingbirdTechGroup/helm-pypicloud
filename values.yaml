@@ -68,3 +68,5 @@ affinity: {}
 serviceAccount:
   create: false
   name: default # allow overriding the default service account name
+
+logLevel: WARN # one of ERROR, WARN, INFO, DEBUG
