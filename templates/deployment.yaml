@@ -19,6 +19,7 @@ spec:
         app: {{ include "pypicloud.name" . }}
         release: {{ .Release.Name }}
     spec:
+      serviceAccountName: {{ template "pypicloud.serviceAccountName" . }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

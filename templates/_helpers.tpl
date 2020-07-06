@@ -30,3 +30,32 @@ Create chart name and version as used by the chart label.
 {{- define "pypicloud.chart" -}}
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Create the name of the service account
+*/}}
+{{- define "pypicloud.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "pypicloud.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+
+{{- /*
+pypicloud.labels.standard prints the standard pypicloud Helm labels.
+
+The standard labels are frequently used in metadata.
+*/ -}}
+{{- define "pypicloud.labels.standard" -}}
+app: {{ template "pypicloud.name" . }}
+chart: {{ template "pypicloud.chartref" . }}
+heritage: {{ .Release.Service | quote }}
+release: {{ .Release.Name | quote }}
+{{- end -}}
+
+*/ -}}
+{{- define "pypicloud.chartref" -}}
+{{- replace "+" "_" .Chart.Version | printf "%s-%s" .Chart.Name -}}
+{{- end -}}
