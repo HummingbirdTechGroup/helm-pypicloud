@@ -18,9 +18,11 @@ storage.region_name = {{ .Values.storage.region }}
 # storage.gcp_service_account_json_filename = /etc/pypicloud-secret/service_key.json
 storage.gcp_use_iam_signer=true
 
+{{- if .Values.redis.enabled }}
 # Use redis as caching backend
 pypi.db = redis
-db.url = redis://redis:6379/0
+db.url = redis://:{{ .redisPassword }}@{{ .Values.redis.host }}:{{ .Values.redis.port }}/0
+{{- end }}
 
 auth.admins = {{ .adminUsername }}
 

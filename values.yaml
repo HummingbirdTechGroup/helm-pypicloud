@@ -31,6 +31,12 @@ ingress:
 
 redis:
   enabled: true
+  host: pypicloud-redis-master
+  port: 6379
+  usePassword: true
+  existingSecret: pypicloud-env
+  existingSecretPasswordKey: redis.password
+
 storage: {}
   # bucket: my-bucket
   # region: us-central1
