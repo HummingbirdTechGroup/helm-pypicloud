@@ -75,7 +75,7 @@ spec:
       volumes:
         - name: config-volume
           secret:
-            secretName: pycloud-config
+            secretName: pypicloud-config
 {{- if .Values.gcsSecret }}
         - name: secret-volume
           secret:

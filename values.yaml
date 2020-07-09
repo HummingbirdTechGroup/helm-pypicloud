@@ -34,7 +34,7 @@ redis:
   host: pypicloud-redis-master
   port: 6379
   usePassword: true
-  existingSecret: pypicloud-env
+  existingSecret: pypicloud-secrets
   existingSecretPasswordKey: redis.password
 
 storage: {}
@@ -51,7 +51,7 @@ env:
 gcsSecret:
 
 # If present, secret containing environment variables for e.g. passwords
-envSecret:
+envSecret: pypicloud-secrets
 
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
