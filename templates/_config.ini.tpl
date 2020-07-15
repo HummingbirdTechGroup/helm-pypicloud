@@ -29,8 +29,8 @@ db.url = redis://:{{ .redisPassword }}@{{ .Values.redis.host }}:{{ .Values.redis
 
 auth.admins = {{ .adminUsername }}
 
-user.{{ .adminUsername }} = {{ .adminPassword }}
-user.{{ .userUsername }} = {{ .userPassword }}
+user.{{ .adminUsername }} = $ADMIN_PASSWORD
+user.{{ .userUsername }} = $USER_PASSWORD
 
 # For beaker
 session.encrypt_key = {{ .sessionEncryptKey }}

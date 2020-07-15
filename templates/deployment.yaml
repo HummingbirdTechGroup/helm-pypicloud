@@ -20,6 +20,30 @@ spec:
         release: {{ .Release.Name }}
     spec:
       serviceAccountName: {{ template "pypicloud.serviceAccountName" . }}
+{{- if .Values.envSecret }}
+      initContainers:
+        - name: init-config
+          image: "ubuntu:20.04"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ['bash', '-exc', "export DEBIAN_FRONTEND=noninteractive; apt-get update; apt-get -y install gettext whois; for p in `set | awk -F= '$1 ~ /PASSWORD/ { print }'`; do k=${p%=*}; v=${p#*=}; export $k=`mkpasswd -m sha512crypt -s -R 20500 $v`; done; envsubst < /etc/pypicloud-config/config.ini > /etc/pypicloud/config.ini"]
+          volumeMounts:
+          - name: config-template
+            mountPath: /etc/pypicloud-config
+          - name: config-volume
+            mountPath: /etc/pypicloud
+# Get environment variables from secret, if defined in envSecret
+          env:
+            - name: ADMIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                    name: {{ .Values.envSecret }}
+                    key: users.admin.password
+            - name: USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                    name: {{ .Values.envSecret }}
+                    key: users.user.password
+{{- end }}
       containers:
         - name: {{ .Chart.Name }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
@@ -44,36 +68,13 @@ spec:
               path: /
               port: http
           env:
-            # Get environment variables from env
 {{ toYaml .Values.env | indent 12 }}
-            # Get environment variables from secret, if defined in envSecret
-{{- if .Values.envSecret }}
-            - name: USER_ADMIN
-              valueFrom:
-                secretKeyRef:
-                    name: {{ .Values.envSecret }}
-                    key: userAdmin
-            - name: USER_USER
-              valueFrom:
-                secretKeyRef:
-                    name: {{ .Values.envSecret }}
-                    key: userUser
-            - name: SESSION_ENCRYPT_KEY
-              valueFrom:
-                secretKeyRef:
-                    name: {{ .Values.envSecret }}
-                    key: sessionEncryptKey
-            - name: SESSION_VALIDATE_KEY
-              valueFrom:
-                secretKeyRef:
-                    name: {{ .Values.envSecret }}
-                    key: sessionValidateKey
-{{- end }}
-
           resources:
 {{ toYaml .Values.resources | indent 12 }}
       volumes:
         - name: config-volume
+          emptyDir: {}
+        - name: config-template
           secret:
             secretName: pypicloud-config
 {{- if .Values.gcsSecret }}

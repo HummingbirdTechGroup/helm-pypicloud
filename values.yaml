@@ -42,11 +42,7 @@ storage: {}
   # region: us-central1
   # prefix: ~ # store data under this folder in bucket
 
-env:
-  # - name: PROJECT_ID
-  #   value:
-  # - name: REGION
-  #   value:
+env: []
 
 # If present, secret containing 'service_key.json' for access to Google Container Storage bucket
 gcsSecret:
