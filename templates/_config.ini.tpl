@@ -14,6 +14,9 @@ pypi.storage = gcs
 
 storage.bucket = {{ .Values.storage.bucket }}
 storage.region_name = {{ .Values.storage.region }}
+{{- if .Values.storage.prefix }}
+storage.prefix = {{ .Values.storage.prefix }}
+{{- end }}
 
 # storage.gcp_service_account_json_filename = /etc/pypicloud-secret/service_key.json
 storage.gcp_use_iam_signer=true

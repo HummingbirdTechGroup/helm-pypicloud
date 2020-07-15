@@ -40,6 +40,7 @@ redis:
 storage: {}
   # bucket: my-bucket
   # region: us-central1
+  # prefix: ~ # store data under this folder in bucket
 
 env:
   # - name: PROJECT_ID
