@@ -8,36 +8,49 @@ pyramid.debug_notfound = false
 pyramid.debug_routematch = false
 pyramid.default_locale_name = en
 
-pypi.default_read = authenticated
+###
+# Storage configuration
+# https://pypicloud.readthedocs.io/en/latest/topics/storage.html
+###
+pypi.storage = {{ .Values.pypi.storage }}
 
-pypi.storage = gcs
-
-storage.bucket = {{ .Values.storage.bucket }}
-storage.region_name = {{ .Values.storage.region }}
-{{- if .Values.storage.prefix }}
-storage.prefix = {{ .Values.storage.prefix }}
+{{- range $k, $v := .Values.storage }}
+storage.{{ $k }}: {{ $v }}
 {{- end }}
 
-# storage.gcp_service_account_json_filename = /etc/pypicloud-secret/service_key.json
-storage.gcp_use_iam_signer=true
+{{- if .Values.gcsSecret }}
+storage.gcp_service_account_json_filename = /etc/pypicloud-secret/service_key.json
+{{- end }}
 
+###
+# Caching
+###
 {{- if .Values.redis.enabled }}
 # Use redis as caching backend
 pypi.db = redis
 db.url = redis://:{{ .redisPassword }}@{{ .Values.redis.host }}:{{ .Values.redis.port }}/0
 {{- end }}
 
+###
+# Authentication
+###
+pypi.default_read = {{ .Values.pypi.default_read }}
+
 auth.admins = {{ .adminUsername }}
 
 user.{{ .adminUsername }} = $ADMIN_PASSWORD
 user.{{ .userUsername }} = $USER_PASSWORD
 
-# For beaker
-session.encrypt_key = {{ .sessionEncryptKey }}
-session.validate_key = {{ .sessionValidateKey }}
+###
+# Session management
+###
 
 session.secure = True
 session.invalidate_corrupt = true
+
+# For beaker
+session.encrypt_key = {{ .sessionEncryptKey }}
+session.validate_key = {{ .sessionValidateKey }}
 
 ###
 # wsgi server configuration
@@ -57,7 +70,7 @@ enable-threads = true
 http = 0.0.0.0:8080
 
 ###
-# logging configuration
+# Logging configuration
 # http://docs.pylonsproject.org/projects/pyramid/en/latest/narr/logging.html
 ###
 
@@ -82,4 +95,4 @@ formatter = generic
 
 [formatter_generic]
 format = %(levelname)s %(asctime)s [%(name)s] %(message)s
-{{- end }}
+{{ end }}

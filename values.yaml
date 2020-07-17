@@ -29,6 +29,25 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+pypi:
+  # Authentication required for read
+  default_read: authenticated
+
+  # Storage engine to use (eg. "gcs" or "aws"), see https://pypicloud.readthedocs.io/en/latest/topics/storage.html
+  # for the list of valid backends
+  storage: gcs
+
+# Storage configuration, see https://pypicloud.readthedocs.io/en/latest/topics/storage.html#storage
+# for the list of valid directives for your chosen provider
+storage: {}
+  # bucket: my-bucket
+  # region: us-central1
+  # prefix: ~ # store data under this folder in bucket
+  # gcp_use_iam_signer: true # should be set if using GCS backend with default credentials (ie without credentials the gcsSecret secret)
+
+# If present, secret containing 'service_key.json' for access to Google Container Storage bucket
+gcsSecret:
+
 redis:
   enabled: true
   host: pypicloud-redis-master
@@ -37,15 +56,7 @@ redis:
   existingSecret: pypicloud-secrets
   existingSecretPasswordKey: redis.password
 
-storage: {}
-  # bucket: my-bucket
-  # region: us-central1
-  # prefix: ~ # store data under this folder in bucket
-
 env: []
-
-# If present, secret containing 'service_key.json' for access to Google Container Storage bucket
-gcsSecret:
 
 # If present, secret containing environment variables for e.g. passwords
 envSecret: pypicloud-secrets
