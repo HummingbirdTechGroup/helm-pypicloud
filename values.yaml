@@ -30,6 +30,8 @@ ingress:
   #      - chart-example.local
 
 pypi:
+  db: redis
+
   # Authentication required for read
   default_read: authenticated
 
@@ -49,12 +51,15 @@ storage: {}
 gcsSecret:
 
 redis:
-  enabled: true
+  enabled: true # enable redis subchart
   host: pypicloud-redis-master
   port: 6379
   usePassword: true
   existingSecret: pypicloud-secrets
   existingSecretPasswordKey: redis.password
+
+auth:
+  admins: admin
 
 env: []
 

@@ -9,11 +9,16 @@ pyramid.debug_routematch = false
 pyramid.default_locale_name = en
 
 ###
+# Top level PyPI config
+###
+{{- range $k, $v := .Values.pypi }}
+pypi.{{ $k }}: {{ $v }}
+{{- end }}
+
+###
 # Storage configuration
 # https://pypicloud.readthedocs.io/en/latest/topics/storage.html
 ###
-pypi.storage = {{ .Values.pypi.storage }}
-
 {{- range $k, $v := .Values.storage }}
 storage.{{ $k }}: {{ $v }}
 {{- end }}
@@ -27,16 +32,15 @@ storage.gcp_service_account_json_filename = /etc/pypicloud-secret/service_key.js
 ###
 {{- if .Values.redis.enabled }}
 # Use redis as caching backend
-pypi.db = redis
 db.url = redis://:{{ .redisPassword }}@{{ .Values.redis.host }}:{{ .Values.redis.port }}/0
 {{- end }}
 
 ###
 # Authentication
 ###
-pypi.default_read = {{ .Values.pypi.default_read }}
-
-auth.admins = {{ .adminUsername }}
+{{- range $k, $v := .Values.auth }}
+auth.{{ $k }}: {{ $v }}
+{{- end }}
 
 user.{{ .adminUsername }} = $ADMIN_PASSWORD
 user.{{ .userUsername }} = $USER_PASSWORD
