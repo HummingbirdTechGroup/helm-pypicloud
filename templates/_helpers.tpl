@@ -59,3 +59,10 @@ release: {{ .Release.Name | quote }}
 {{- define "pypicloud.chartref" -}}
 {{- replace "+" "_" .Chart.Version | printf "%s-%s" .Chart.Name -}}
 {{- end -}}
+
+{{- /*
+Secret name / environment variable name from username in the form of USER_{{UPPERCASED_USERNAME}}_PASSWORD
+*/ -}}
+{{- define "pypicloud.user_password" -}}
+{{- printf "USER_%s_PASSWORD" . | upper }}
+{{- end }}

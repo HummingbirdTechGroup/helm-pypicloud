@@ -42,8 +42,9 @@ db.url = redis://:{{ .redisPassword }}@{{ .Values.redis.host }}:{{ .Values.redis
 auth.{{ $k }}: {{ $v }}
 {{- end }}
 
-user.{{ .adminUsername }} = $ADMIN_PASSWORD
-user.{{ .userUsername }} = $USER_PASSWORD
+{{- range $k, $v := .Values.users }}
+user.{{ $k }}: {{ default $v ( printf "$USER_%s_PASSWORD" (upper $k) ) }}
+{{- end }}
 
 ###
 # Session management

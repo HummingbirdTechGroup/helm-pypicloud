@@ -25,24 +25,16 @@ spec:
         - name: init-config
           image: "ubuntu:20.04"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ['bash', '-exc', "export DEBIAN_FRONTEND=noninteractive; apt-get update; apt-get -y install gettext whois; for p in `set | awk -F= '$1 ~ /PASSWORD/ { print }'`; do k=${p%=*}; v=${p#*=}; export $k=`mkpasswd -m sha512crypt -s -R 20500 $v`; done; envsubst < /etc/pypicloud-config/config.ini > /etc/pypicloud/config.ini"]
+          command: ['bash', '-ec', "export DEBIAN_FRONTEND=noninteractive; apt-get update; apt-get -y install gettext whois; for p in `set | awk -F= '$1 ~ /USER_.*_PASSWORD/ { print }'`; do k=${p%=*}; v=${p#*=}; export $k=`mkpasswd -m sha512crypt -s -R 20500 $v`; done; envsubst < /etc/pypicloud-config/config.ini > /etc/pypicloud/config.ini"]
           volumeMounts:
           - name: config-template
             mountPath: /etc/pypicloud-config
           - name: config-volume
             mountPath: /etc/pypicloud
 # Get environment variables from secret, if defined in envSecret
-          env:
-            - name: ADMIN_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                    name: {{ .Values.envSecret }}
-                    key: users.admin.password
-            - name: USER_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                    name: {{ .Values.envSecret }}
-                    key: users.user.password
+          envFrom:
+            - secretRef:
+                name: {{ .Values.envSecret }}
 {{- end }}
       containers:
         - name: {{ .Chart.Name }}

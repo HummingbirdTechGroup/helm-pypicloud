@@ -56,10 +56,14 @@ redis:
   port: 6379
   usePassword: true
   existingSecret: pypicloud-secrets
-  existingSecretPasswordKey: redis.password
+  existingSecretPasswordKey: redisPassword
 
 auth:
   admins: admin
+
+users:
+    admin: "" # value can be set to SHA512 hash of password, a random password will be generated if set to empty string
+    user: ""
 
 env: []
 
