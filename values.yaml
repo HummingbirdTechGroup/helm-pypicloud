@@ -84,3 +84,7 @@ serviceAccount:
   name: default # allow overriding the default service account name
 
 logLevel: WARN # one of ERROR, WARN, INFO, DEBUG
+
+# Configuration directives that will be appended at the end of config.ini
+# Variable substitution is possible - any environment variable reference (eg $ENV_VAR) will be replaced by the value of the environment variable
+additionalConfig: ""

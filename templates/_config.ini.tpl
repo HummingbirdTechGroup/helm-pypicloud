@@ -96,3 +96,5 @@ formatter = generic
 [formatter_generic]
 format = %(levelname)s %(asctime)s [%(name)s] %(message)s
 {{ end }}
+
+{{ .Values.additionalConfig }}
