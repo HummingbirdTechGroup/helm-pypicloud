@@ -55,10 +55,14 @@ spec:
             httpGet:
               path: /
               port: http
+            timeoutSeconds: 3
+            initialDelaySeconds: 30
           readinessProbe:
             httpGet:
               path: /
               port: http
+            timeoutSeconds: 3
+            initialDelaySeconds: 30
           env:
 {{ toYaml .Values.env | indent 12 }}
           resources:
