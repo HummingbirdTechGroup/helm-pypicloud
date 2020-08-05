@@ -42,8 +42,8 @@ db.url = redis://:{{ .redisPassword }}@{{ .Values.redis.host }}:{{ .Values.redis
 auth.{{ $k }}: {{ $v }}
 {{- end }}
 
-{{- range $k, $v := .Values.users }}
-user.{{ $k }}: {{ default $v ( printf "$USER_%s_PASSWORD" (upper $k) ) }}
+{{- range $k, $v := .passwords }}
+user.{{ htpasswd $k $v | replace ":" ": " }}
 {{- end }}
 
 ###

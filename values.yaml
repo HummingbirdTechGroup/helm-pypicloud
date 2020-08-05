@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: stevearc/pypicloud
-  tag: 1.1.1
+  tag: latest
   pullPolicy: IfNotPresent
 
 nameOverride: ""
@@ -60,6 +60,8 @@ redis:
 
 auth:
   admins: admin
+  scheme: bcrypt
+  rounds: 1
 
 users:
     admin: "" # value can be set to SHA512 hash of password, a random password will be generated if set to empty string
